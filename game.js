@@ -127,3 +127,9 @@ function getHint() {
         document.getElementById("hint-message").textContent = "Hint already given.";
     }
 }
+
+
+// Function to restart the game
+function restartGame() {
+    init();  // Reinitialize the game
+}
