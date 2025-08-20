@@ -9,31 +9,24 @@
 <body>
     <h1>Spaceman Game</h1>
 
-   
     <div id="spaceman-emoji">
         <span id="spaceman">🚀</span>
     </div>
 
-    
     <div id="word-display"></div>
 
     <div>Guesses Left: <span id="guesses-left">6</span></div>
     
     <div>Guessed Letters: <span id="guessed-letters"></span></div>
 
-    <input type="text" id="letter-input" maxlength="1" />
-    <button onclick="guessLetter()">Guess Letter</button>
-    
-   
+    <label for="letter-input">Enter letter or word:</label>
+    <input type="text" id="letter-input" />
+    <button onclick="guessLetter()">Guess</button>
+
     <button onclick="getHint()">Get Hint</button>
 
-    
     <div id="emoji-message"></div>
-
-   
     <div id="message"></div>
-
-    
     <div id="hint-message"></div>
     
     <div id="restart-container" style="display: none;">

@@ -2,7 +2,11 @@ let wordDisplay;
 let guessedLetters = [];
 let remainingGuesses = 6;
 let isGameOver = false;
-let hintGiven = false;  
+let hintGiven = false;
+let secretWord = "";
+
+// Emojis representing remaining guesses (6 to 0)
+const spacemanEmojis = ["😵‍💫", "😵", "😳", "😟", "😐", "🙂", "🚀"];
 
 // List of space-related words with corresponding hints
 const spaceWords = [
@@ -18,7 +22,6 @@ const spaceWords = [
     { word: "telescope", hint: "An instrument used to observe distant objects in space." }
 ];
 
-
 function init() {
     // Reset game state variables
     secretWord = "";
@@ -29,26 +32,23 @@ function init() {
     hintGiven = false;
     document.getElementById("hint-message").textContent = "";
 
+    // Update UI for new game start
+    document.getElementById("message").textContent = "";
+    document.getElementById("emoji-message").textContent = "";  
+    document.getElementById("guessed-letters").textContent = "";
+    document.getElementById("guesses-left").textContent = remainingGuesses;
+    document.getElementById("spaceman").textContent = spacemanEmojis[remainingGuesses];
+    document.getElementById("letter-input").disabled = false;
+    document.querySelector("button").disabled = false;
 
-     // Update UI for new game start
-     document.getElementById("message").textContent = "";
-     document.getElementById("emoji-message").textContent = "";  
-     document.getElementById("guessed-letters").textContent = "";
-     document.getElementById("guesses-left").textContent = remainingGuesses;
-     document.getElementById("spaceman").textContent = spacemanEmojis[remainingGuesses];
-     document.getElementById("letter-input").disabled = false;
-     document.querySelector("button").disabled = false;
- 
-     // Call startGame to initialize the word
-     startGame();
- }
+    // Call startGame to initialize the word
+    startGame();
+}
 
-
- function startGame() {
+function startGame() {
     // Randomly choose a word and its hint from the spaceWords array
     const randomIndex = Math.floor(Math.random() * spaceWords.length);
     secretWord = spaceWords[randomIndex].word;
-    const secretHint = spaceWords[randomIndex].hint;
 
     // Set the hint for this word
     hintGiven = false; // Reset hint status
@@ -59,27 +59,56 @@ function init() {
     remainingGuesses = 6;
     isGameOver = false;
 
- // Update UI with the initial word and guesses
- document.getElementById("word-display").textContent = wordDisplay.join(" ");
- document.getElementById("guessed-letters").textContent = guessedLetters.join(", ");
- document.getElementById("guesses-left").textContent = remainingGuesses;
- document.getElementById("spaceman").textContent = spacemanEmojis[remainingGuesses];
- document.getElementById("restart-container").style.display = "none";
+    // Update UI with the initial word and guesses
+    document.getElementById("word-display").textContent = wordDisplay.join(" ");
+    document.getElementById("guessed-letters").textContent = guessedLetters.join(", ");
+    document.getElementById("guesses-left").textContent = remainingGuesses;
+    document.getElementById("spaceman").textContent = spacemanEmojis[remainingGuesses];
+    document.getElementById("restart-container").style.display = "none";
 }
 
-
-// Function to handle guesses
+// Function to handle guesses (both single letters and full words)
 function guessLetter() {
-    const input = document.getElementById("letter-input").value.toLowerCase();
-    if (!input || guessedLetters.includes(input) || input.length !== 1) {
-        document.getElementById("message").textContent = "Invalid guess or letter already guessed.";
+    if (isGameOver) return; // Prevent guessing after game over
+
+    const input = document.getElementById("letter-input").value.toLowerCase().trim();
+
+    // Validate input is alphabetic
+    if (!/^[a-z]+$/.test(input)) {
+        document.getElementById("message").textContent = "Please enter a valid word or letter from a-z.";
+        document.getElementById("letter-input").value = "";
         return;
     }
 
+    // Already guessed letter
+    if (input.length === 1 && guessedLetters.includes(input)) {
+        document.getElementById("message").textContent = "You already guessed that letter.";
+        document.getElementById("letter-input").value = "";
+        return;
+    }
+
+    // Handle full word guess
+    if (input.length > 1) {
+        if (input === secretWord) {
+            wordDisplay = secretWord.split('');
+            document.getElementById("word-display").textContent = wordDisplay.join(" ");
+            document.getElementById("message").textContent = "You guessed the full word! You win!";
+            document.getElementById("emoji-message").textContent = "😊";
+            endGame();
+        } else {
+            remainingGuesses--;
+            document.getElementById("guesses-left").textContent = remainingGuesses;
+            document.getElementById("spaceman").textContent = spacemanEmojis[remainingGuesses];
+            document.getElementById("message").textContent = "Incorrect word guess.";
+            checkGameOver();
+        }
+        document.getElementById("letter-input").value = "";
+        return;
+    }
+
+    // Handle single letter guess
     guessedLetters.push(input);
     document.getElementById("guessed-letters").textContent = guessedLetters.join(", ");
-
-    // Check if guessed letter is in the word
 
     let letterFound = false;
     for (let i = 0; i < secretWord.length; i++) {
@@ -91,30 +120,33 @@ function guessLetter() {
 
     if (!letterFound) {
         remainingGuesses--;
-        document.getElementById("guesses-left").textContent = remainingGuesses;
         document.getElementById("spaceman").textContent = spacemanEmojis[remainingGuesses];
-    }
-    // Check if the game is over
-    if (wordDisplay.join("") === secretWord) {
-        document.getElementById("message").textContent = "You win!";
-        document.getElementById("emoji-message").textContent = "😊";  // Happy emoji on win
-        isGameOver = true;
-    } else if (remainingGuesses === 0) {
-        document.getElementById("message").textContent = `Game Over! The word was: ${secretWord}.`;
-        document.getElementById("emoji-message").textContent = "😞";  // Sad emoji on loss
-        isGameOver = true;
-    } else {
-        document.getElementById("word-display").textContent = wordDisplay.join(" ");
-    }
-    // Disable further guesses if the game is over
-    if (isGameOver) {
-        document.getElementById("letter-input").disabled = true;
-        document.querySelector("button").disabled = true;
-        document.getElementById("restart-container").style.display = "block";
+        document.getElementById("guesses-left").textContent = remainingGuesses;
     }
 
-    // Clear the input field
+    document.getElementById("word-display").textContent = wordDisplay.join(" ");
+    checkGameOver();
+
     document.getElementById("letter-input").value = "";
+}
+
+function checkGameOver() {
+    if (wordDisplay.join("") === secretWord) {
+        document.getElementById("message").textContent = "You win!";
+        document.getElementById("emoji-message").textContent = "😊";
+        endGame();
+    } else if (remainingGuesses === 0) {
+        document.getElementById("message").textContent = `Game Over! The word was: ${secretWord}.`;
+        document.getElementById("emoji-message").textContent = "😞";
+        endGame();
+    }
+}
+
+function endGame() {
+    isGameOver = true;
+    document.getElementById("letter-input").disabled = true;
+    document.querySelector("button").disabled = true;
+    document.getElementById("restart-container").style.display = "block";
 }
 
 // Function to show hint
@@ -128,8 +160,10 @@ function getHint() {
     }
 }
 
-
 // Function to restart the game
 function restartGame() {
     init();  // Reinitialize the game
 }
+
+// Start the game on load
+init();
