@@ -42,3 +42,27 @@ function init() {
      // Call startGame to initialize the word
      startGame();
  }
+
+
+ function startGame() {
+    // Randomly choose a word and its hint from the spaceWords array
+    const randomIndex = Math.floor(Math.random() * spaceWords.length);
+    secretWord = spaceWords[randomIndex].word;
+    const secretHint = spaceWords[randomIndex].hint;
+
+    // Set the hint for this word
+    hintGiven = false; // Reset hint status
+
+    // Display the word as underscores
+    wordDisplay = Array(secretWord.length).fill("_");
+    guessedLetters = [];
+    remainingGuesses = 6;
+    isGameOver = false;
+
+ // Update UI with the initial word and guesses
+ document.getElementById("word-display").textContent = wordDisplay.join(" ");
+ document.getElementById("guessed-letters").textContent = guessedLetters.join(", ");
+ document.getElementById("guesses-left").textContent = remainingGuesses;
+ document.getElementById("spaceman").textContent = spacemanEmojis[remainingGuesses];
+ document.getElementById("restart-container").style.display = "none";
+}
