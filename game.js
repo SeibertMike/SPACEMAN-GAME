@@ -66,3 +66,52 @@ function init() {
  document.getElementById("spaceman").textContent = spacemanEmojis[remainingGuesses];
  document.getElementById("restart-container").style.display = "none";
 }
+
+
+// Function to handle guesses
+function guessLetter() {
+    const input = document.getElementById("letter-input").value.toLowerCase();
+    if (!input || guessedLetters.includes(input) || input.length !== 1) {
+        document.getElementById("message").textContent = "Invalid guess or letter already guessed.";
+        return;
+    }
+
+    guessedLetters.push(input);
+    document.getElementById("guessed-letters").textContent = guessedLetters.join(", ");
+
+    // Check if guessed letter is in the word
+    let letterFound = false;
+    for (let i = 0; i < secretWord.length; i++) {
+        if (secretWord[i] === input) {
+            wordDisplay[i] = input;
+            letterFound = true;
+        }
+    }
+
+    if (!letterFound) {
+        remainingGuesses--;
+        document.getElementById("guesses-left").textContent = remainingGuesses;
+        document.getElementById("spaceman").textContent = spacemanEmojis[remainingGuesses];
+    }
+    // Check if the game is over
+    if (wordDisplay.join("") === secretWord) {
+        document.getElementById("message").textContent = "You win!";
+        document.getElementById("emoji-message").textContent = "😊";  // Happy emoji on win
+        isGameOver = true;
+    } else if (remainingGuesses === 0) {
+        document.getElementById("message").textContent = `Game Over! The word was: ${secretWord}.`;
+        document.getElementById("emoji-message").textContent = "😞";  // Sad emoji on loss
+        isGameOver = true;
+    } else {
+        document.getElementById("word-display").textContent = wordDisplay.join(" ");
+    }
+    // Disable further guesses if the game is over
+    if (isGameOver) {
+        document.getElementById("letter-input").disabled = true;
+        document.querySelector("button").disabled = true;
+        document.getElementById("restart-container").style.display = "block";
+    }
+
+    // Clear the input field
+    document.getElementById("letter-input").value = "";
+}
