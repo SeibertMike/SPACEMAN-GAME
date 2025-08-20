@@ -80,6 +80,7 @@ function guessLetter() {
     document.getElementById("guessed-letters").textContent = guessedLetters.join(", ");
 
     // Check if guessed letter is in the word
+
     let letterFound = false;
     for (let i = 0; i < secretWord.length; i++) {
         if (secretWord[i] === input) {
@@ -114,4 +115,15 @@ function guessLetter() {
 
     // Clear the input field
     document.getElementById("letter-input").value = "";
+}
+
+// Function to show hint
+function getHint() {
+    if (!hintGiven) {
+        const hint = spaceWords.find(wordObj => wordObj.word === secretWord).hint;
+        document.getElementById("hint-message").textContent = "Hint: " + hint;
+        hintGiven = true;
+    } else {
+        document.getElementById("hint-message").textContent = "Hint already given.";
+    }
 }
