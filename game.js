@@ -17,3 +17,28 @@ const spaceWords = [
     { word: "nebula", hint: "A giant cloud of gas and dust in space, often a region where new stars are born." },
     { word: "telescope", hint: "An instrument used to observe distant objects in space." }
 ];
+
+
+function init() {
+    // Reset game state variables
+    secretWord = "";
+    wordDisplay = [];
+    guessedLetters = [];
+    remainingGuesses = 6;
+    isGameOver = false;
+    hintGiven = false;
+    document.getElementById("hint-message").textContent = "";
+
+
+     // Update UI for new game start
+     document.getElementById("message").textContent = "";
+     document.getElementById("emoji-message").textContent = "";  
+     document.getElementById("guessed-letters").textContent = "";
+     document.getElementById("guesses-left").textContent = remainingGuesses;
+     document.getElementById("spaceman").textContent = spacemanEmojis[remainingGuesses];
+     document.getElementById("letter-input").disabled = false;
+     document.querySelector("button").disabled = false;
+ 
+     // Call startGame to initialize the word
+     startGame();
+ }
