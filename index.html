@@ -1,38 +1,43 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Spaceman Game</title>
-    <link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Spaceman Game</title>
+  <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-    <h1>Spaceman Game</h1>
+  <h1>Spaceman Game</h1>
 
-    <div id="spaceman-emoji">
-        <span id="spaceman">🚀</span>
-    </div>
+  <div id="spaceman-emoji">
+    <span id="spaceman">🚀</span>
+  </div>
 
-    <div id="word-display"></div>
+  <div id="word-display"></div>
 
-    <div>Guesses Left: <span id="guesses-left">6</span></div>
-    
-    <div>Guessed Letters: <span id="guessed-letters"></span></div>
+  <div>Guesses Left: <span id="guesses-left">6</span></div>
+  <div>Guessed Letters: <span id="guessed-letters"></span></div>
 
-    <label for="letter-input">Enter letter or word:</label>
-    <input type="text" id="letter-input" />
-    <button onclick="guessLetter()">Guess</button>
+  <label for="letter-input">Enter letter or word:</label>
+  <input type="text" id="letter-input" />
+  <button id="guess-btn">Guess</button>
+  <button onclick="getHint()">Get Hint</button>
 
-    <button onclick="getHint()">Get Hint</button>
+  <div id="emoji-message"></div>
+  <div id="message"></div>
+  <div id="hint-message"></div>
 
-    <div id="emoji-message"></div>
-    <div id="message"></div>
-    <div id="hint-message"></div>
-    
-    <div id="restart-container" style="display: none;">
-        <button onclick="restartGame()">Play Again</button>
-    </div>
+  <div id="scoreboard">
+    Wins: <span id="wins">0</span> |
+    Losses: <span id="losses">0</span>
+  </div>
 
-    <script src="game.js"></script>
+  <div id="restart-container" style="display: none;">
+    <button onclick="restartGame()">Play Again</button>
+  </div>
+
+  <div id="stars-container"></div>
+
+  <script src="game.js"></script>
 </body>
 </html>

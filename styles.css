@@ -1,4 +1,4 @@
-/* Reset */
+/* Base Reset */
 body {
     margin: 0;
     padding: 0;
@@ -9,13 +9,45 @@ body {
     flex-direction: column;
     align-items: center;
     min-height: 100vh;
+    overflow: hidden;
+    position: relative;
+}
+
+/* Starry background (JS will create .star divs) */
+.star {
+    position: absolute;
+    background: white;
+    border-radius: 50%;
+    opacity: 0.8;
+    animation-name: twinkle;
+    animation-iteration-count: infinite;
+    animation-timing-function: ease-in-out;
+}
+
+@keyframes twinkle {
+    0%, 100% { opacity: 0.8; }
+    50% { opacity: 0.2; }
 }
 
 /* Title */
 h1 {
     font-size: 3rem;
     margin-top: 2rem;
-    text-shadow: 0 0 10px #00fff2;
+    text-shadow: 0 0 15px #00fff2, 0 0 5px #00fff2;
+}
+
+/* Spaceman Emoji */
+#spaceman {
+    font-size: 5rem;
+    margin: 1rem 0;
+    transition: transform 0.3s ease-in-out;
+}
+
+/* Bounce Animation */
+@keyframes bounce {
+    0%   { transform: translateY(0); }
+    50%  { transform: translateY(-20px); }
+    100% { transform: translateY(0); }
 }
 
 /* Word display */
@@ -23,21 +55,23 @@ h1 {
     font-size: 2rem;
     letter-spacing: 10px;
     margin: 20px 0;
+    text-shadow: 0 0 10px #ffffff88;
 }
 
-/* Info section */
+/* Info sections */
 div {
     margin: 10px;
+    text-align: center;
 }
 
-/* Emoji section */
-#spaceman {
-    font-size: 5rem;
-    margin: 1rem 0;
-    transition: transform 0.3s ease-in-out;
+/* Labels and highlights */
+label {
+    font-weight: bold;
+    margin-bottom: 5px;
+    display: block;
 }
 
-/* Highlight messages */
+/* Message styling */
 #message {
     font-size: 1.5rem;
     font-weight: bold;
@@ -48,19 +82,25 @@ div {
 #emoji-message {
     font-size: 3rem;
     margin-bottom: 1rem;
+    transition: transform 0.3s ease-in-out;
 }
 
-/* Input and Buttons */
+/* Input field */
 #letter-input {
     font-size: 1.2rem;
     padding: 10px;
-    width: 200px;
+    width: 220px;
     text-align: center;
     border: none;
-    border-radius: 5px;
+    border-radius: 6px;
     margin-bottom: 10px;
+    background: #1f1f3a;
+    color: #fff;
+    box-shadow: 0 0 5px #00fff2;
+    outline: none;
 }
 
+/* Buttons */
 button {
     font-size: 1rem;
     padding: 10px 15px;
@@ -70,26 +110,60 @@ button {
     border-radius: 5px;
     margin: 5px;
     cursor: pointer;
-    transition: background 0.3s ease-in-out;
+    transition: all 0.3s ease-in-out;
+    box-shadow: 0 0 5px #00fff2;
 }
 
 button:hover {
     background-color: #00bfbf;
+    transform: scale(1.05);
 }
 
-/* Hint and Restart */
+/* Hint message */
 #hint-message {
     font-style: italic;
     margin-top: 10px;
     color: #ffcc00;
+    font-size: 1.1rem;
 }
 
+/* Restart container */
 #restart-container {
-    margin-top: 20px;
+    margin-top: 25px;
+    display: none; /* Hidden by default, JS toggles this */
 }
 
+#restart-container button {
+    font-size: 1.1rem;
+    padding: 12px 25px;
+    background-color: #00fff2;
+    color: #000;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    box-shadow: 0 0 8px #00fff2;
+    transition: all 0.3s ease-in-out;
+}
+
+#restart-container button:hover {
+    background-color: #00bfbf;
+    transform: scale(1.05);
+}
+
+/* Scoreboard styles */
+#scoreboard {
+    font-weight: bold;
+    color: #ff5e5e;
+    font-size: 1.3rem;
+    text-shadow: 0 0 8px #ff5e5eaa;
+    margin-top: 15px;
+}
+
+/* Guesses left & guessed letters styling */
 #guesses-left,
 #guessed-letters {
     font-weight: bold;
     color: #ff5e5e;
+    font-size: 1.2rem;
+    text-shadow: 0 0 5px #ff5e5eaa;
 }
