@@ -127,27 +127,32 @@ button:hover {
     font-size: 1.1rem;
 }
 
-/* Restart container */
+/* Restart container (centered popup) */
 #restart-container {
-    margin-top: 25px;
     display: none; /* Hidden by default, JS toggles this */
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1000;
+    text-align: center;
 }
 
 #restart-container button {
-    font-size: 1.1rem;
-    padding: 12px 25px;
+    font-size: 1.5rem;
+    padding: 16px 32px;
     background-color: #00fff2;
     color: #000;
     border: none;
-    border-radius: 6px;
+    border-radius: 12px;
     cursor: pointer;
-    box-shadow: 0 0 8px #00fff2;
+    box-shadow: 0 0 15px #00fff2, 0 0 25px #00fff2aa;
     transition: all 0.3s ease-in-out;
 }
 
 #restart-container button:hover {
     background-color: #00bfbf;
-    transform: scale(1.05);
+    transform: scale(1.1);
 }
 
 /* Scoreboard styles */

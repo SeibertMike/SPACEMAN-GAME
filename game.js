@@ -46,7 +46,8 @@ function init() {
   document.getElementById("hint-message").textContent = "";
   document.getElementById("message").textContent = "";
   document.getElementById("emoji-message").textContent = "";
-  document.getElementById("guessed-letters").textContent = "";
+  const guessedLettersEl = document.getElementById("guessed-letters");
+  if (guessedLettersEl) guessedLettersEl.textContent = "";
   document.getElementById("guesses-left").textContent = remainingGuesses;
   document.getElementById("spaceman").textContent = spacemanEmojis[remainingGuesses];
   document.getElementById("letter-input").disabled = false;
@@ -60,14 +61,16 @@ function init() {
 
 function startGame() {
   const randomIndex = Math.floor(Math.random() * spaceWords.length);
-  secretWord = spaceWords[randomIndex].word;
+  // always store lowercase to avoid mismatch
+  secretWord = spaceWords[randomIndex].word.toLowerCase();
   wordDisplay = Array(secretWord.length).fill("_");
   updateUI();
 }
 
 function updateUI() {
   document.getElementById("word-display").textContent = wordDisplay.join(" ") + ` (${secretWord.length} letters)`;
-  document.getElementById("guessed-letters").textContent = guessedLetters.join(", ");
+  const guessedLettersEl = document.getElementById("guessed-letters");
+  if (guessedLettersEl) guessedLettersEl.textContent = guessedLetters.join(", ");
   document.getElementById("guesses-left").textContent = remainingGuesses;
   document.getElementById("spaceman").textContent = spacemanEmojis[remainingGuesses];
   document.getElementById("letter-input").value = "";
@@ -84,6 +87,7 @@ function guessLetter() {
     return;
   }
 
+  // full word guess
   if (input.length > 1) {
     if (fullWordGuessCount >= maxFullWordGuesses) {
       messageEl.textContent = "You've used all full word guesses!";
@@ -104,10 +108,10 @@ function guessLetter() {
       sounds.wrong?.play();
       checkGameOver();
     }
-
     return;
   }
 
+  // single letter guess
   if (guessedLetters.includes(input)) {
     messageEl.textContent = "You already guessed that letter.";
     return;
@@ -177,15 +181,19 @@ function showEndMessage(won, fullWord = false) {
 }
 
 function getHint() {
-  const hint = spaceWords.find(w => w.word === secretWord)?.hint;
-  document.getElementById("hint-message").textContent = hintGiven
-    ? "Hint already given."
-    : "Hint: " + hint;
-  hintGiven = true;
-}
+  // ensure lowercase match
+  const wordObj = spaceWords.find(w => w.word.toLowerCase() === secretWord.toLowerCase());
+  if (!wordObj) {
+    document.getElementById("hint-message").textContent = "No hint available.";
+    return;
+  }
 
-function restartGame() {
-  init();
+  if (hintGiven) {
+    document.getElementById("hint-message").textContent = "Hint already given.";
+  } else {
+    document.getElementById("hint-message").textContent = "Hint: " + wordObj.hint;
+    hintGiven = true;
+  }
 }
 
 function updateScoreboard() {
@@ -195,6 +203,7 @@ function updateScoreboard() {
 
 function createStars(num = 100) {
   const container = document.getElementById("stars-container");
+  container.innerHTML = ""; // clear old stars when restarting
   for (let i = 0; i < num; i++) {
     const star = document.createElement("div");
     star.classList.add("star");
@@ -213,3 +222,8 @@ document.getElementById("guess-btn").addEventListener("click", guessLetter);
 // Run init on load
 init();
 createStars();
+function restartGame() {
+    init();        // reset all game state
+    createStars(); // re-render stars background
+  }
+  
