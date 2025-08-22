@@ -36,7 +36,7 @@ The game ends when you guess correctly or use up all guesses. Click Play Again t
 
 Clone or download the repository:
 
-git clone https://github.com/your-username/spaceman-game.git
+git clone https://github.com/SeibertMike/SPACEMAN-GAME.git
 cd spaceman-game
 
 
